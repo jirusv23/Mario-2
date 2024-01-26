@@ -14,39 +14,41 @@ pozice_ctverce_y = (rozliseni_okna[1]-height)
 
 velocity = 4
 isJump = False
-jumpCount = 10
 
-zacinajici_pozice_x = rozliseni_okna[0]/2
-zacinajici_pozice_y = rozliseni_okna[1] + height
+velikost_pohybu = 8  
+jumpCount = velikost_pohybu
+
+zacinajici_pozice_x = rozliseni_okna[0]/2 #doproštred obrazovky
+zacinajici_pozice_y = rozliseni_okna[1] + height #na spodek obrazovky
 
 run = True
 
 while run:
-    pygame.time.delay(10)
+    pygame.time.delay(10) #framerate
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
-    keys = pygame.key.get_pressed()
+    stisknuté_klavesy = pygame.key.get_pressed()
     
-    if keys[pygame.K_LEFT] and pozice_ctverce_x > velocity:  # Making sure the top left position of our character is greater than our velocity so we never move off the screen.
+    if stisknuté_klavesy[pygame.K_LEFT] and pozice_ctverce_x > velocity:  #pohyb vlevo a kontrola zdi
         pozice_ctverce_x -= velocity
 
-    if keys[pygame.K_RIGHT] and pozice_ctverce_x < 500 - velocity - width:  # Making sure the top right corner of our character is less than the screen width - its width 
+    if stisknuté_klavesy[pygame.K_RIGHT] and pozice_ctverce_x < 500 - velocity - width:  #pohyb pravo a kontrola zdi
         pozice_ctverce_x += velocity
 
     if isJump  == False: #pokuď neskače
         
-        if keys[pygame.K_SPACE]:
+        if stisknuté_klavesy[pygame.K_SPACE]: 
             isJump = True
     else:
-        if jumpCount >= -10:
-            pozice_ctverce_y -= (jumpCount*abs(jumpCount)) * 0.5
-            jumpCount -= 1
+        if jumpCount >= -velikost_pohybu:
+            pozice_ctverce_y -= (jumpCount*abs(jumpCount)) * 0.5 #snižuje rychlost skoku nahoru
+            jumpCount -= 1 #snižuje čas skoku
         else:
-            jumpCount = 10
-            isJump  = False
+            jumpCount = velikost_pohybu #resetuje a připravý na nový skok
+            isJump  = False 
     
     okno.fill((0,0,0))
     pygame.draw.rect(okno, (255,0,0), (pozice_ctverce_x, pozice_ctverce_y, width, height))   
